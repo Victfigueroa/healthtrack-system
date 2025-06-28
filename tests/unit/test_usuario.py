@@ -2,9 +2,7 @@
 # Edición realizada por Víctor Figueroa
 # Pruebas unitarias para la clase Usuario, especialmente método actualizar_peso
 
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+from src.usuario import Usuario
 
 import pytest
 from src.usuario import Usuario
