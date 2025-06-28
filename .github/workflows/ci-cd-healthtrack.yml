@@ -33,14 +33,14 @@ jobs:
 
     - name: Run unit tests
       run: |
-        pytest tests/unit --maxfail=1 --disable-warnings -q
+        PYTHONPATH=src pytest tests/unit --maxfail=1 --disable-warnings -q
 
     - name: Run functional tests (Selenium)
       env:
         DISPLAY: :99
         SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
       run: |
-        pytest tests/functional --maxfail=1 --disable-warnings -q
+        PYTHONPATH=src pytest tests/functional --maxfail=1 --disable-warnings -q
 
     - name: SonarQube Scan
       uses: SonarSource/sonarcloud-github-action@master
