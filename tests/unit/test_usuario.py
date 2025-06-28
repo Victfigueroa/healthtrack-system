@@ -5,11 +5,11 @@
 import sys
 import os
 
-# Ajuste para que Python pueda encontrar la carpeta src desde entornos CI/CD
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
+# Ajuste para que Python pueda encontrar la carpeta src desde entornos locales y CI/CD
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
 import pytest
-from src.usuario import Usuario
+from usuario import Usuario
 
 def test_actualizar_peso_correcto():
     # Creo un usuario con peso inicial de 70 kg
