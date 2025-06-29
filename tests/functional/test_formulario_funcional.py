@@ -30,7 +30,7 @@ else:
     driver = webdriver.Chrome(service=servicio, options=chrome_options)
 
 # Abro el archivo HTML en el navegador
-driver.get("file://" + ruta_archivo)
+driver.get("http://localhost:8000/formulario_usuario.html")
 
 # Espero que cargue el formulario
 time.sleep(1)

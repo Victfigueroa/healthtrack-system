@@ -41,6 +41,11 @@ jobs:
       run: |
         pytest tests/unit --maxfail=1 --disable-warnings -q
 
+    - name: Start HTTP server for functional tests
+      run: |
+        python -m http.server 8000 &
+        sleep 3
+
     - name: Run functional tests (Selenium)
       env:
         DISPLAY: :99
