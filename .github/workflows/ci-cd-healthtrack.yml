@@ -32,10 +32,18 @@ jobs:
         pip install selenium pytest pytest-html
         pip install -e .
 
-    - name: Start simple HTTP server
+    # Copiar el formulario a carpeta 'public' para servirlo
+    - name: Preparar carpeta pública
       run: |
-        python3 -m http.server 8000 &
-        sleep 5
+        mkdir -p public
+        cp tests/functional/formulario_usuario.html public/
+
+    # Levantar servidor HTTP en background desde carpeta 'public'
+    - name: Levantar servidor HTTP para el formulario
+      run: |
+        cd public
+        nohup python3 -m http.server 8000 &
+        sleep 5  # Espera para que servidor levante
 
     - name: Run unit tests
       run: |
@@ -43,7 +51,6 @@ jobs:
 
     - name: Run functional tests (Selenium)
       env:
-        DISPLAY: :99
         SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
       run: |
         PYTHONPATH=./src pytest --rootdir=. tests/functional --maxfail=1 --disable-warnings -q
