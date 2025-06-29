@@ -36,7 +36,7 @@ jobs:
     - name: Preparar carpeta pública
       run: |
         mkdir -p public
-        cp tests/functional/formulario_usuario.html public/
+        cp formulario_usuario.html public/
 
     # Levantar servidor HTTP en background desde carpeta 'public'
     - name: Levantar servidor HTTP para el formulario
