@@ -32,14 +32,14 @@ jobs:
         pip install selenium pytest pytest-html
         pip install -e .
 
+    - name: Start simple HTTP server
+      run: |
+        python3 -m http.server 8000 &
+        sleep 5
+
     - name: Run unit tests
       run: |
         pytest tests/unit --maxfail=1 --disable-warnings -q
-
-    - name: Start HTTP server in background
-      run: |
-        python -m http.server 8000 &
-        sleep 3  # Espera para que el servidor arranque
 
     - name: Run functional tests (Selenium)
       env:
@@ -57,4 +57,3 @@ jobs:
           -Dsonar.projectKey=healthtrack-system
           -Dsonar.organization=victfigueroa
           -Dsonar.host.url=https://sonarcloud.io
-

@@ -2,11 +2,10 @@
 # Edición realizada por Víctor Figueroa
 # Prueba funcional usando Selenium para verificar el formulario de actualización de peso
 
-import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import os
 
 # Configurar el driver para usar el Selenium Grid (Docker) en GitHub Actions
@@ -22,16 +21,23 @@ driver = webdriver.Remote(
 url = "http://localhost:8000/formulario_usuario.html"
 
 driver.get(url)
-time.sleep(1)
 
-driver.find_element(By.ID, "nombre").send_keys("Victor")
-driver.find_element(By.ID, "peso").send_keys("75")
+wait = WebDriverWait(driver, 10)  # espera hasta 10 segundos
 
-driver.find_element(By.TAG_NAME, "button").click()
+# Esperar y llenar el campo nombre
+nombre_input = wait.until(EC.visibility_of_element_located((By.ID, "nombre")))
+nombre_input.send_keys("Victor")
 
-time.sleep(1)
+# Esperar y llenar el campo peso
+peso_input = wait.until(EC.visibility_of_element_located((By.ID, "peso")))
+peso_input.send_keys("75")
 
-resultado = driver.find_element(By.ID, "resultado").text
+# Esperar y clicar el botón
+boton = wait.until(EC.element_to_be_clickable((By.TAG_NAME, "button")))
+boton.click()
+
+# Esperar a que aparezca el resultado
+resultado = wait.until(EC.visibility_of_element_located((By.ID, "resultado"))).text
 
 assert resultado == "Usuario: Victor, Peso actualizado: 75 kg"
 
