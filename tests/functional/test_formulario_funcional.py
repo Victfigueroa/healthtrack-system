@@ -3,29 +3,23 @@
 # Prueba funcional usando Selenium para verificar el formulario de actualización de peso
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 import os
 
-SELENIUM_REMOTE_URL = os.environ.get("SELENIUM_REMOTE_URL", "http://localhost:4444/wd/hub")
-
-options = webdriver.ChromeOptions()
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--no-sandbox")
+options = Options()
 options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--window-size=1920x1080")
 
-# Habilitar acceso a localhost desde contenedor
-options.add_argument("--host-resolver-rules=MAP localhost 127.0.0.1")
+service = Service("/usr/bin/google-chrome")  # Chrome ya está instalado con apt
 
-driver = webdriver.Remote(
-    command_executor=SELENIUM_REMOTE_URL,
-    options=options
-)
-
-url = "http://localhost:8000/formulario_usuario.html"
-driver.get(url)
+driver = webdriver.Chrome(options=options)
+driver.get("http://localhost:8000/formulario_usuario.html")
 
 wait = WebDriverWait(driver, 10)
 
@@ -42,4 +36,3 @@ resultado = wait.until(EC.visibility_of_element_located((By.ID, "resultado"))).t
 assert resultado == "Usuario: Victor, Peso actualizado: 75 kg"
 
 driver.quit()
-

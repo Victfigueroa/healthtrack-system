@@ -10,12 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        ports:
-          - 4444:4444
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -31,6 +25,14 @@ jobs:
         pip install -r requirements.txt
         pip install selenium pytest pytest-html
         pip install -e .
+
+    - name: Instalar Google Chrome
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install -y ./google-chrome-stable_current_amd64.deb
+        google-chrome --version
 
     - name: Preparar carpeta pública
       run: |
@@ -48,10 +50,8 @@ jobs:
         pytest tests/unit --maxfail=1 --disable-warnings -q
 
     - name: Run functional tests (Selenium)
-      env:
-        SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
       run: |
-        PYTHONPATH=./src pytest --rootdir=. tests/functional --maxfail=1 --disable-warnings -q
+        PYTHONPATH=./src pytest tests/functional --maxfail=1 --disable-warnings -q
 
     - name: SonarQube Scan
       uses: SonarSource/sonarcloud-github-action@master
