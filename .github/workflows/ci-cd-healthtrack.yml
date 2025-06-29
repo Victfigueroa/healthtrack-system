@@ -32,21 +32,14 @@ jobs:
         pip install selenium pytest pytest-html
         pip install -e .
 
-    - name: List project files and check installed packages
-      run: |
-        ls -R
-        python -m pip show healthtrack || echo "Package healthtrack no instalado"
-
-    - name: Start local server in background
-      run: |
-        cd tests/functional
-        python3 -m http.server 8000 &
-        cd ../../
-        sleep 2  # Esperar a que el servidor esté listo
-
     - name: Run unit tests
       run: |
         pytest tests/unit --maxfail=1 --disable-warnings -q
+
+    - name: Start HTTP server in background
+      run: |
+        python -m http.server 8000 &
+        sleep 3  # Espera para que el servidor arranque
 
     - name: Run functional tests (Selenium)
       env:
@@ -64,3 +57,4 @@ jobs:
           -Dsonar.projectKey=healthtrack-system
           -Dsonar.organization=victfigueroa
           -Dsonar.host.url=https://sonarcloud.io
+
