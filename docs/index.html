@@ -1,0 +1,34 @@
+<!-- formulario_usuario.html -->
+<!-- Edición realizada por Víctor Figueroa -->
+<!-- Formulario básico para pruebas funcionales con Selenium -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HealthTrack - Actualizar Peso</title>
+</head>
+<body>
+    <h2>Formulario de Registro de Peso</h2>
+    <form id="formulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre"><br><br>
+
+        <label for="peso">Peso (kg):</label>
+        <input type="number" id="peso" name="peso"><br><br>
+
+        <button type="submit">Actualizar Peso</button>
+    </form>
+
+    <p id="resultado"></p>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const nombre = document.getElementById("nombre").value;
+            const peso = document.getElementById("peso").value;
+            document.getElementById("resultado").innerText = `Usuario: ${nombre}, Peso actualizado: ${peso} kg`;
+        });
+    </script>
+</body>
+</html>
