@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    # CI/CD Workflow para HealthTrack System - por Victor Figueroa
     runs-on: ubuntu-latest
 
     steps:
