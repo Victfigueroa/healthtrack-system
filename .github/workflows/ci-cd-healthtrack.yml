@@ -32,18 +32,16 @@ jobs:
         pip install selenium pytest pytest-html
         pip install -e .
 
-    # Copiar el formulario a carpeta 'public' para servirlo
     - name: Preparar carpeta pública
       run: |
         mkdir -p public
         cp formulario_usuario.html public/
 
-    # Levantar servidor HTTP en background desde carpeta 'public'
     - name: Levantar servidor HTTP para el formulario
       run: |
         cd public
         nohup python3 -m http.server 8000 &
-        sleep 5  # Espera para que servidor levante
+        sleep 5
 
     - name: Run unit tests
       run: |
@@ -64,3 +62,4 @@ jobs:
           -Dsonar.projectKey=healthtrack-system
           -Dsonar.organization=victfigueroa
           -Dsonar.host.url=https://sonarcloud.io
+
