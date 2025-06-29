@@ -7,35 +7,48 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
-# Ruta local del archivo HTML
+# Obtengo la ruta absoluta del archivo HTML local
 ruta_archivo = os.path.abspath("formulario_usuario.html")
 
-# Configuración del driver de Chrome usando Service 
-servicio = Service("C:/Users/Olivia/selenium_test_funcional/chromedriver.exe")
-driver = webdriver.Chrome(service=servicio)
+# Configuro opciones para Chrome en modo headless
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
 
-# Abrir el archivo HTML en el navegador
+# Verifico si estoy en entorno CI/CD (GitHub Actions)
+selenium_url = os.getenv("SELENIUM_REMOTE_URL")
+
+if selenium_url:
+    # En entorno CI/CD uso Selenium remoto
+    driver = webdriver.Remote(command_executor=selenium_url, options=chrome_options)
+else:
+    # En entorno local utilizo chromedriver desde mi máquina
+    servicio = Service("C:/Users/Olivia/selenium_test_funcional/chromedriver.exe")
+    driver = webdriver.Chrome(service=servicio, options=chrome_options)
+
+# Abro el archivo HTML en el navegador
 driver.get("file://" + ruta_archivo)
 
-# Esperar a que cargue
+# Espero que cargue el formulario
 time.sleep(1)
 
-# Llenar el formulario
+# Lleno el formulario con los datos
 driver.find_element(By.ID, "nombre").send_keys("Victor")
 driver.find_element(By.ID, "peso").send_keys("75")
 
-# Enviar el formulario
+# Hago clic en el botón
 driver.find_element(By.TAG_NAME, "button").click()
 
-# Esperar a que aparezca el resultado
+# Espero la respuesta
 time.sleep(1)
 
-# Obtener el resultado
+# Obtengo el resultado y lo verifico
 resultado = driver.find_element(By.ID, "resultado").text
-
-# Verificación
 assert resultado == "Usuario: Victor, Peso actualizado: 75 kg"
 
-# Finalizar
+# Cierro el navegador
 driver.quit()
+
