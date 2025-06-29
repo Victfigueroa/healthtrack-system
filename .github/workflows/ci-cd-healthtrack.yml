@@ -16,15 +16,6 @@ jobs:
         ports:
           - 4444:4444
 
-      web:
-        image: python:3.13
-        ports:
-          - 8000:8000
-        volumes:
-          - .:/app
-        working-directory: /app/public
-        command: python -m http.server 8000
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -45,6 +36,12 @@ jobs:
       run: |
         mkdir -p public
         cp formulario_usuario.html public/
+
+    - name: Levantar servidor HTTP para el formulario
+      run: |
+        cd public
+        nohup python3 -m http.server 8000 &
+        sleep 5
 
     - name: Run unit tests
       run: |

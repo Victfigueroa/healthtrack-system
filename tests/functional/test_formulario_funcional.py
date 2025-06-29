@@ -11,13 +11,20 @@ import os
 SELENIUM_REMOTE_URL = os.environ.get("SELENIUM_REMOTE_URL", "http://localhost:4444/wd/hub")
 
 options = webdriver.ChromeOptions()
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
+options.add_argument("--headless")
+options.add_argument("--window-size=1920x1080")
+
+# Habilitar acceso a localhost desde contenedor
+options.add_argument("--host-resolver-rules=MAP localhost 127.0.0.1")
+
 driver = webdriver.Remote(
     command_executor=SELENIUM_REMOTE_URL,
     options=options
 )
 
-# Acceder al formulario desde el contenedor del servicio 'web'
-url = "http://web:8000/formulario_usuario.html"
+url = "http://localhost:8000/formulario_usuario.html"
 driver.get(url)
 
 wait = WebDriverWait(driver, 10)
